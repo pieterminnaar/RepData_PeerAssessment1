@@ -1,21 +1,14 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
-```r
-library(dplyr)
-```
+Reproducible Research: Peer Assessment 1
+----------------------------------------
 
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
+
 
 ## Loading and preprocessing the data
 - Create a folder for ProjectData
@@ -39,7 +32,7 @@ steps.by.day <- aggregate(steps ~ date, data=data, FUN=sum)
 hist(steps.by.day$steps, breaks=10, xlab="Number of steps", main="Steps taken per day")
 ```
 
-![](./PA1_template_files/figure-html/histogram-1.png) 
+![plot of chunk histogram](figure/histogram-1.png) 
 
 ## What is the average daily activity pattern?
 
