@@ -48,7 +48,20 @@ complete.days <- group_by(inner_join(data, complete.dates), date)
 ```r
 steps.sum.by.day <- summarise(complete.days, total = sum(steps))
 mean.steps.per.day <- mean(steps.sum.by.day$total)
+mean.steps.per.day
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median.steps.per.day <- median(steps.sum.by.day$total)
+median.steps.per.day
+```
+
+```
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?

@@ -85,7 +85,11 @@ complete.days &lt;- group_by(inner_join(data, complete.dates), date)</code></pre
 <pre><code>## Joining by: &quot;date&quot;</code></pre>
 <pre class="r"><code>steps.sum.by.day &lt;- summarise(complete.days, total = sum(steps))
 mean.steps.per.day &lt;- mean(steps.sum.by.day$total)
-median.steps.per.day &lt;- median(steps.sum.by.day$total)</code></pre>
+mean.steps.per.day</code></pre>
+<pre><code>## [1] 10766.19</code></pre>
+<pre class="r"><code>median.steps.per.day &lt;- median(steps.sum.by.day$total)
+median.steps.per.day</code></pre>
+<pre><code>## [1] 10765</code></pre>
 </div>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
