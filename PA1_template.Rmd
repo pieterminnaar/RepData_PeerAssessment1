@@ -10,7 +10,7 @@ Uses dplyr library
 ```{r libraries, message=FALSE}
 library(dplyr)
 library(knitr)
-library(latice)
+library(lattice)
 ```
 
 ```{r setglobaloptions}
@@ -87,4 +87,12 @@ valid.steps.weekdays <- mutate(valid.steps,
                                                  weekdays(as.Date(date)) == 'Sunday', 
                                                  'Weekend', 'Weekday'))
 valid.steps.weekdays$day_type <- as.factor(valid.steps.weekdays$day_type)
+grouped.steps.day_types <- group_by(valid.steps.weekdays, interval, day_type)
+interval.day_type.means <- summarise(grouped.steps.day_types, mean(steps))
+names(interval.day_type.means) <- c('interval', 'day_type', 'mean_steps')
+attach(interval.day_type.means)
+xyplot(mean_steps ~ interval | day_type, 
+       panel = panel.lines,
+       xlab = "Interval", ylab = "Number of steps", 
+       main = "Steps per interval by type of day")
 ```

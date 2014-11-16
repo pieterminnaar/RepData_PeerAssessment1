@@ -1,4 +1,9 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
 Uses dplyr library
 
@@ -6,6 +11,7 @@ Uses dplyr library
 ```r
 library(dplyr)
 library(knitr)
+library(lattice)
 ```
 
 
@@ -36,7 +42,7 @@ steps.by.day <- aggregate(steps ~ date, data=data, FUN=sum)
 hist(steps.by.day$steps, breaks=10, xlab="Number of steps", main="Steps taken per day")
 ```
 
-![](./PA1_template_files/figure-html/histogram-1.png) 
+![plot of chunk histogram](figure/histogram-1.png) 
  
 Test all days for complete interval values. A day with partly filled 
 with interval values would give skew results for mean or median.
@@ -77,7 +83,7 @@ plot(interval.means$interval, interval.means$mean,
 lines(interval.means$interval, interval.means$mean, type='l')
 ```
 
-![](./PA1_template_files/figure-html/plot_for_steps-1.png) 
+![plot of chunk plot_for_steps](figure/plot_for_steps-1.png) 
 
 ```r
 max_steps <- max(interval.means$mean)
@@ -102,6 +108,24 @@ derived.steps.by.day <- aggregate(derived.steps ~ date, data=complete.data.deriv
 hist(derived.steps.by.day$derived.steps, breaks=10, xlab="Number of steps", main="Steps taken per day")
 ```
 
-![](./PA1_template_files/figure-html/derive_values_for_na_from_mean-1.png) 
+![plot of chunk derive_values_for_na_from_mean](figure/derive_values_for_na_from_mean-1.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```r
+valid.steps.weekdays <- mutate(valid.steps, 
+                               day_type = ifelse(weekdays(as.Date(date)) == 'Saturday' | 
+                                                 weekdays(as.Date(date)) == 'Sunday', 
+                                                 'Weekend', 'Weekday'))
+valid.steps.weekdays$day_type <- as.factor(valid.steps.weekdays$day_type)
+grouped.steps.day_types <- group_by(valid.steps.weekdays, interval, day_type)
+interval.day_type.means <- summarise(grouped.steps.day_types, mean(steps))
+names(interval.day_type.means) <- c('interval', 'day_type', 'mean_steps')
+attach(interval.day_type.means)
+xyplot(mean_steps ~ interval | day_type, 
+       panel = panel.lines,
+       xlab = "Interval", ylab = "Number of steps", 
+       main = "Steps per interval by type of day")
+```
+
+![plot of chunk compare_weekdays](figure/compare_weekdays-1.png) 
