@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 Uses dplyr library
 
@@ -41,7 +36,7 @@ steps.by.day <- aggregate(steps ~ date, data=data, FUN=sum)
 hist(steps.by.day$steps, breaks=10, xlab="Number of steps", main="Steps taken per day")
 ```
 
-![plot of chunk histogram](figure/histogram-1.png) 
+![](./PA1_template_files/figure-html/histogram-1.png) 
  
 Test all days for complete interval values. A day with partly filled 
 with interval values would give skew results for mean or median.
@@ -82,7 +77,7 @@ plot(interval.means$interval, interval.means$mean,
 lines(interval.means$interval, interval.means$mean, type='l')
 ```
 
-![plot of chunk plot_for_steps](figure/plot_for_steps-1.png) 
+![](./PA1_template_files/figure-html/plot_for_steps-1.png) 
 
 ```r
 max_steps <- max(interval.means$mean)
@@ -91,7 +86,22 @@ max_steps <- max(interval.means$mean)
 ####Interval period with highest average: 835
 
 ## Imputing missing values
+Replace missing values with for steps with the mean
 
+```r
+complete.data <- inner_join(data, interval.means)
+```
 
+```
+## Joining by: "interval"
+```
+
+```r
+complete.data.derived <- mutate(complete.data, derived.steps = ifelse ((is.na(steps)), mean, steps))
+derived.steps.by.day <- aggregate(derived.steps ~ date, data=complete.data.derived, FUN=sum)
+hist(derived.steps.by.day$derived.steps, breaks=10, xlab="Number of steps", main="Steps taken per day")
+```
+
+![](./PA1_template_files/figure-html/derive_values_for_na_from_mean-1.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?

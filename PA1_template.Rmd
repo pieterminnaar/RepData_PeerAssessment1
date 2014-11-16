@@ -10,6 +10,7 @@ Uses dplyr library
 ```{r libraries, message=FALSE}
 library(dplyr)
 library(knitr)
+library(latice)
 ```
 
 ```{r setglobaloptions}
@@ -71,7 +72,19 @@ max_steps <- max(interval.means$mean)
 ####Interval period with highest average: `r interval.means$interval[which(interval.means$mean == max_steps)]`
 
 ## Imputing missing values
-
-
+Replace missing values with for steps with the mean
+```{r derive_values_for_na_from_mean}
+complete.data <- inner_join(data, interval.means)
+complete.data.derived <- mutate(complete.data, derived.steps = ifelse ((is.na(steps)), mean, steps))
+derived.steps.by.day <- aggregate(derived.steps ~ date, data=complete.data.derived, FUN=sum)
+hist(derived.steps.by.day$derived.steps, breaks=10, xlab="Number of steps", main="Steps taken per day")
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r compare_weekdays}
+valid.steps.weekdays <- mutate(valid.steps, 
+                               day_type = ifelse(weekdays(as.Date(date)) == 'Saturday' | 
+                                                 weekdays(as.Date(date)) == 'Sunday', 
+                                                 'Weekend', 'Weekday'))
+valid.steps.weekdays$day_type <- as.factor(valid.steps.weekdays$day_type)
+```
